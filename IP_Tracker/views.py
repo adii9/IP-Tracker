@@ -5,14 +5,15 @@ import json
 import requests
 from urllib.request import urlopen
 from json import dumps
+from requests import get
 # Create your views here.
-import socket
+
 
 
 def Home(request):
-    hostname = socket.gethostname()
-    ip = socket.gethostbyname(hostname)
-    print("Your Computer IP Address is:" + ip)
+    ip = get('https://api.ipify.org').text
+    print("Your Computer IP Address is:", ip)
+    print(type(ip))
     api_key = 'at_MZxV86uJWy8Bzr0Pe0ydfi7sEzzw3'
     api_url = 'https://geo.ipify.org/api/v1?'
     url = api_url + 'apiKey=' + api_key + '&ipAddress=' + ip
@@ -25,9 +26,11 @@ def Home(request):
     postalCode = json_obj['location']['postalCode']
     time_zone = json_obj['location']['timezone']
     isp = json_obj['isp']
-    return render(request, "index.html",
-                  {'ip': ip, 'country': country, 'postalCode': postalCode, 'time_zone': time_zone,
-                   'isp': isp})
+    print(longitude)
+    print(latitude)
+    return render(request, 'index.html',
+                  {'ip': ip, 'region': region, 'country': country, 'postalCode': postalCode, 'time_zone': time_zone,
+                   'isp': isp, 'latitude': latitude, 'longitude': longitude})
 
 
 def show_ip_result(request):
